@@ -1,46 +1,71 @@
-// src/lib/hero.svelte.ts
 import type { Hero } from './types';
 import { messageService } from './message.svelte';
 
-// Створюємо реактивний стан (аналог heroesSignal в Angular)
+// Створюємо реактивний стан
 let heroes = $state<Hero[]>([]);
 let isLoading = $state(false);
 
 export const heroService = {
-  // Геттери для доступу до стану (read-only)
+  // Геттери для доступу до стану
   get all() { return heroes; },
   get loading() { return isLoading; },
 
-  // Методи (аналоги методів з Angular HeroService)
+  // 1. Завантаження всіх героїв
   async loadAll() {
     isLoading = true;
-    // Тут буде запит до API, поки що імітуємо завантаження
-    const response = await fetch('/api/heroes');
-    heroes = await response.json();
-    isLoading = false;
+    try {
+      const response = await fetch('/api/heroes');
+      if (!response.ok) throw new Error('Failed to fetch');
+
+      heroes = await response.json();
+      messageService.add('HeroService: fetched heroes');
+    } catch (error) {
+      console.error('Fetch failed', error);
+      messageService.add('HeroService: Error fetching heroes');
+    } finally {
+      isLoading = false;
+    }
   },
 
+  // 2. Додавання нового героя
   async add(name: string) {
-    const response = await fetch('/api/heroes', {
-      method: 'POST',
-      body: JSON.stringify({ name }),
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const newHero = await response.json();
-    // В Svelte 5 ми просто мутуємо масив або перепризначаємо його
-    heroes.push(newHero);
+    try {
+      const response = await fetch('/api/heroes', {
+        method: 'POST',
+        body: JSON.stringify({ name }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!response.ok) throw new Error('Failed to add hero');
+
+      const newHero = await response.json();
+      heroes.push(newHero);
+      messageService.add(`HeroService: added hero w/ id=${newHero.id}`);
+    } catch (error) {
+      messageService.add('HeroService: Error adding hero');
+    }
   },
 
+  // 3. Видалення героя
   async delete(id: number) {
-    await fetch(`/api/heroes/${id}`, { method: 'DELETE' });
-    heroes = heroes.filter(h => h.id !== id);
+    try {
+      const response = await fetch(`/api/heroes/${id}`, { method: 'DELETE' });
+
+      if (!response.ok) throw new Error('Failed to delete hero');
+
+      heroes = heroes.filter(h => h.id !== id);
+      messageService.add(`HeroService: deleted hero id=${id}`);
+    } catch (error) {
+      messageService.add(`HeroService: Error deleting hero id=${id}`);
+    }
   },
 
+  // 4. Оновлення героя
   async update(updatedHero: Hero) {
     try {
       const response = await fetch(`/api/heroes`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' }, // 🟢 Важливо для API
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedHero)
       });
 
@@ -48,13 +73,14 @@ export const heroService = {
         const index = heroes.findIndex(h => h.id === updatedHero.id);
         if (index !== -1) {
           heroes[index] = updatedHero;
-          // 🟢 Додаємо повідомлення, як в Angular версії
           messageService.add(`HeroService: updated hero id=${updatedHero.id}`);
         }
+      } else {
+        throw new Error('Update failed on server');
       }
     } catch (error) {
       console.error('Update failed', error);
-      messageService.add(`HeroService: update failed for id=${updatedHero.id}`);
+      messageService.add(`HeroService: Error updating hero id=${updatedHero.id}`);
     }
   }
 };

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { messageService } from '$lib/message.svelte';
   import favicon from '$lib/assets/favicon.svg';
+  import Messages from '$lib/components/Messages.svelte';
   import '../app.css';
 
-  let { children } = $props(); // Це обов'язково для Svelte 5
+  let { children } = $props();
 </script>
 
 <svelte:head>
@@ -11,20 +11,41 @@
   <title>Tour of Heroes</title>
 </svelte:head>
 
-<h1>Tour of Heroes</h1>
-<nav>
-  <a href="/">Dashboard</a>
-  <a href="/heroes">Heroes</a>
-</nav>
+<header>
+  <h1>Tour of Heroes</h1>
+  <nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/heroes">Heroes</a>
+  </nav>
+</header>
 
-{@render children()}
+<main>
+  {@render children()}
+</main>
 
-{#if messageService.all.length}
-  <div class="messages">
-    <h2>Messages</h2>
-    <button onclick={() => messageService.clear()}>Clear messages</button>
-    {#each messageService.all as message}
-      <div>{message}</div>
-    {/each}
-  </div>
-{/if}
+<Messages />
+
+<style>
+  h1 {
+    margin-bottom: 0;
+  }
+  nav a {
+    padding: 1rem;
+    text-decoration: none;
+    margin-right: 10px;
+    margin-top: 10px;
+    display: inline-block;
+    background-color: #e8e8e8;
+    color: #3d3d3d;
+    border-radius: 4px;
+  }
+
+  nav a:last-child {
+    margin-right: 0;
+  }
+
+  nav a:hover {
+    color: white;
+    background-color: #42545c;
+  }
+</style>

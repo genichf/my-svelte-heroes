@@ -39,7 +39,7 @@
 {#if hero}
   <div>
     <h2>{hero.name.toUpperCase()} Details</h2>
-    <div><span>id: </span>{hero.id}</div>
+    <div><span>id: {hero.id}</span></div>
     <div>
       <label for="hero-name">Hero name: </label>
       <input id="hero-name" bind:value={hero.name} placeholder="name" />
