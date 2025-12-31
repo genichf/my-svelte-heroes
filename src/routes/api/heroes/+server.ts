@@ -44,7 +44,7 @@ export async function PUT({ request }) {
 
   if (index !== -1) {
     heroes[index] = updatedHero;
-    return json(null, { status: 204 }); // 204 No Content - успіх без тіла відповіді
+    return new Response(null, { status: 204 }); // 204 No Content - успіх без тіла відповіді
   }
 
   return json({ message: 'Hero not found' }, { status: 404 });

@@ -22,7 +22,7 @@ export async function DELETE({ params }) {
   if (index !== -1) {
     // Видаляємо з масиву
     heroes.splice(index, 1);
-    return json(null, { status: 204 });
+    return new Response(null, { status: 204 });
   }
 
   // Навіть якщо героя не знайдено, зазвичай повертають 204 або 404
