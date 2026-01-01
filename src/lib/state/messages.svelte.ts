@@ -1,5 +1,3 @@
-// src/lib/message.svelte.ts
-
 let messages = $state<string[]>([]);
 
 export const messageService = {

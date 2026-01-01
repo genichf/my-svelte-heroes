@@ -1,4 +1,3 @@
-// src/lib/server/db.ts
 import type { Hero } from '$lib/types';
 
 export let heroes: Hero[] = [

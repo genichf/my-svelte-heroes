@@ -1,5 +1,5 @@
-import type { Hero } from './types';
-import { messageService } from './message.svelte';
+import type { Hero } from '$lib/types';
+import { messageService } from '$lib/state/messages.svelte';
 
 // Створюємо реактивний стан
 let heroes = $state<Hero[]>([]);

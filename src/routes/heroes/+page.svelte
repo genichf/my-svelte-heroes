@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { heroService } from '$lib/hero.svelte';
+  import { heroService } from '$lib/state/heroes.svelte';
   import { onMount } from 'svelte';
 
   // Викликаємо завантаження при першому відкритті сторінки

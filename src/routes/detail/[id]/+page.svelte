@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { page } from '$app/stores';
-  import { heroService } from '$lib/hero.svelte';
+  // 1. Імпортуємо з нового модуля state
+  import { page } from '$app/state';
+  import { heroService } from '$lib/state/heroes.svelte';
   import { onMount } from 'svelte';
   import type { Hero } from '$lib/types';
 
-  // 1. Отримуємо ID з параметрів URL (через вбудований стор page)
-  const id = Number($page.params.id);
+  // 2. Використовуємо БЕЗ знака $, бо це не стор, а проксі-об'єкт
+  // 3. Використовуємо $derived, щоб id оновлювався при зміні URL
+  const id = $derived(Number(page.params.id));
 
   // 2. Локальний стан для редагування героя
   let hero = $state<Hero | null>(null);

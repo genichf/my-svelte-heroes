@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { messageService } from '$lib/message.svelte';
+  import { messageService } from '$lib/state/messages.svelte';
 </script>
 
 {#if messageService.all.length}

@@ -1,4 +1,3 @@
-// src/routes/api/heroes/[id]/+server.ts
 import { json } from '@sveltejs/kit';
 import { heroes } from '$lib/server/db';
 

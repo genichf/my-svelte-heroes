@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { heroService } from '$lib/hero.svelte';
   import type { Hero } from '$lib/types';
 
   let searchTerm = $state('');
